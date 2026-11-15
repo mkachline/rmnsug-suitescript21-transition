@@ -13,13 +13,11 @@ The whole skill is one file: [`SKILL.md`](SKILL.md).
      `https://raw.githubusercontent.com/mkachline/rmnsug-suitescript21-transition/refs/heads/main/SKILL.md`
    - Right-click the page, choose **Save As**, and save it as **`SKILL.md`**. Check that the name is exactly `SKILL.md`, not `SKILL.md.txt`. If your browser added `.txt`, rename the file.
    - In your AI assistant's settings, find **Skills** and upload that file. In Claude this is under Settings > Capabilities, or Customize > Skills, depending on your version of the app.
-2. **Download your scripts.** In NetSuite, go to Documents > File Cabinet, search for `SuiteScripts`, and click **Download** on the row whose Type is **Folder**. You get a `SuiteScripts.zip` file.
-3. **Start the skill.** In a new chat, type `/rmnsug-suitescript21-transition`, then drag and drop `SuiteScripts.zip` into the chat.
-4. **Press Enter.** The assistant converts your scripts, gives you back a `SuiteScripts21.zip`, and walks you through what to check before uploading it to NetSuite. **Nothing is changed in your NetSuite account** until you upload the results yourself.
+2. **Start a conversation.** In a new chat, type `/rmnsug-suitescript21-transition` and tell the assistant you're new to this, for example: "I'm a NetSuite admin, not a programmer. What should I do first?" The assistant will walk you through getting your scripts out of NetSuite, converting them, and what to check before putting them back. **Nothing is changed in your NetSuite account** until you upload the results yourself.
 
 > **Please don't ask the assistant to "install this skill" from a web address.** It will read the page and write its *own* version of the skill, which is not the tested one. Always add the downloaded file through the Skills settings.
 
-*Can't add skills on your plan?* In a chat that can browse the web, attach your zip and say: "Please read https://raw.githubusercontent.com/mkachline/rmnsug-suitescript21-transition/main/SKILL.md and follow it exactly, without rewriting it, to convert my attached SuiteScripts to SuiteScript 2.1."
+*Can't add skills on your plan?* In a chat that can browse the web, say: "Please read https://raw.githubusercontent.com/mkachline/rmnsug-suitescript21-transition/main/SKILL.md and follow it exactly, without rewriting it. I'm a NetSuite admin, not a programmer. What should I do first?"
 
 ## What it does
 
