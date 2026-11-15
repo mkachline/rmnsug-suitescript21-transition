@@ -1,0 +1,27 @@
+# Allowlist: ignore everything at the top level, then un-ignore only the files
+# this repository is meant to contain. This keeps users' NetSuite scripts,
+# zips, and unredacted screenshots from being committed by accident.
+# To add a new top-level file or folder, add an "!" line for it below.
+/*
+
+# Repository files
+!/.gitignore
+!/LICENSE
+!/README.md
+!/SKILL.md
+!/CHANGELOG.md
+!/AGENTS.md
+!/CLAUDE.md
+
+# GitHub config (issue templates)
+!/.github/
+
+# Documentation: Markdown files and the images folder only
+!/docs/
+/docs/*
+!/docs/*.md
+!/docs/images/
+
+# Never commit zips or scripts exported from a NetSuite File Cabinet,
+# even inside an allowed folder
+*.zip
