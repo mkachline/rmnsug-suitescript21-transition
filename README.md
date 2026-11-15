@@ -8,24 +8,16 @@ The whole skill is one file: [`SKILL.md`](SKILL.md).
 
 ## Quick start (NetSuite admins and accountants)
 
-You don't need to read the rest of this page.
-
-**1. Add the skill to your AI assistant, the normal way.**
-a. In your web browser, go to:
-   `https://raw.githubusercontent.com/mkachline/rmnsug-suitescript21-transition/refs/heads/main/SKILL.md`
-
-b. Right-click the page, choose **Save As**, and save it as **`SKILL.md`**. Check that the saved name is exactly `SKILL.md`, not `SKILL.md.txt` or `SKILL.txt`. If your browser adds `.txt`, rename the file.
-
-c. In your AI assistant's settings, find **Skills** and create a new skill by uploading that file, using the assistant's standard process. In Claude this is under Settings > Capabilities, or Customize > Skills, depending on your version of the app. Your assistant's own help pages describe where this is for your plan.
+1. **Install the skill.**
+   - In your web browser, go to
+     `https://raw.githubusercontent.com/mkachline/rmnsug-suitescript21-transition/refs/heads/main/SKILL.md`
+   - Right-click the page, choose **Save As**, and save it as **`SKILL.md`**. Check that the name is exactly `SKILL.md`, not `SKILL.md.txt`. If your browser added `.txt`, rename the file.
+   - In your AI assistant's settings, find **Skills** and upload that file. In Claude this is under Settings > Capabilities, or Customize > Skills, depending on your version of the app.
+2. **Download your scripts.** In NetSuite, go to Documents > File Cabinet, search for `SuiteScripts`, and click **Download** on the row whose Type is **Folder**. You get a `SuiteScripts.zip` file.
+3. **Start the skill.** In a new chat, type `/rmnsug-suitescript21-transition`, then drag and drop `SuiteScripts.zip` into the chat.
+4. **Type `go`.** The assistant converts your scripts, gives you back a `SuiteScripts21.zip`, and walks you through what to check before uploading it to NetSuite. **Nothing is changed in your NetSuite account** until you upload the results yourself.
 
 > **Please don't ask the assistant to "install this skill" from a web address.** It will read the page and write its *own* version of the skill, which is not the tested one. Always add the downloaded file through the Skills settings.
-
-**2. Give it your scripts.**
-Don't have a `SuiteScripts.zip` yet? In NetSuite, go to Documents > File Cabinet, search for `SuiteScripts`, and click **Download** on the row whose Type is **Folder**. Start a new chat, attach the zip, and say:
-
-> Use the rmnsug-suitescript21-transition skill to convert my attached SuiteScripts to SuiteScript 2.1.
-
-The assistant will convert your scripts, return a `SuiteScripts21.zip`, and walk you through what to check before uploading it back. **Nothing is changed in your NetSuite account.** You upload the results yourself, and the assistant will point you to Oracle's instructions.
 
 *Can't add skills on your plan?* In a chat that can browse the web, attach your zip and say: "Please read https://raw.githubusercontent.com/mkachline/rmnsug-suitescript21-transition/main/SKILL.md and follow it exactly, without rewriting it, to convert my attached SuiteScripts to SuiteScript 2.1."
 
