@@ -26,16 +26,16 @@ This skill also requires that you can read web pages. The Oracle documentation p
 
 ## Overall Process this skill should follow
 1. Before starting, read each link in [Additional Resources](#additional-resources). If you can't open the links, see [About the model running this skill](#about-the-model-running-this-skill).
-1. Your user will give you script(s) to convert
+1. Your user will give you script(s) to convert. If they don't know where to start, see [When the user asks "Where do I start?"](#when-the-user-asks-where-do-i-start).
 1. You will almost never need to ask the user questions. Use the defaults in [Default Decisions](#default-decisions-do-not-ask-the-user) and keep going.
     - Only ask a question if you truly cannot proceed. Remember the user is an accountant: they do not understand the File Cabinet's folder structure or source code. Ask in plain business language, and never about files, folders, or code.
     - If the user is a developer or an agent, asking questions is fine.
 1. You will transition each script to SuiteScript 2.1, except those skipped per the Developer Notes below ("Skip ..." notes)
 1. You will return newly-converted script(s) to your user.
 1. You will give the user a summary of what files you changed.
-    - Make sure to highlight the `-WithBugFixes.js` files. Tell the user which bugs you found and fixed, and then have a conversation with them about whether to use the `-WithBugFixes.js` version or the original-named version of each script.
-        - The user would want the original-named version (which retains the bugs) if they want no change in behavior. This is the default recommendation, because the intent of this skill is that the end functionality is exactly what the user is used to today, even if that includes bugs.
-        - The user would want the `-WithBugFixes.js` version if they understand how the script should work with the bug fixed. Remember, if the 'old version' had bugs, then, the user is "used to" the script behaving with bugs. Thus, it's important for the user to understand how the script will work once the bug(s) are fixed.
+    - Make sure to highlight the `-2.1-WithBugFixes.js` files. Tell the user which bugs you found and fixed, and then have a conversation with them about whether to use the `-2.1.js` version or the `-2.1-WithBugFixes.js` version of each script.
+        - The user would want the `-2.1.js` version (which retains the bugs) if they want no change in behavior. This is the default recommendation, because the intent of this skill is that the end functionality is exactly what the user is used to today, even if that includes bugs.
+        - The user would want the `-2.1-WithBugFixes.js` version if they understand how the script should work with the bug fixed. Remember, if the 'old version' had bugs, then, the user is "used to" the script behaving with bugs. Thus, it's important for the user to understand how the script will work once the bug(s) are fixed.
     - Note to the user if any of these scripts appear to contain PII, passwords or API keys. In such a case, use [Oracle Article: Secrets](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_160216486846.html) as a guideline. Flag the secret, but never repeat the actual secret values (passwords, keys, PII) in your reply.
 1. You will mention any third-party library refactors, risks or upgrade suggestions. If no third-party libraries were referenced, then, nothing to say here.
 1. You will give your user suggestions of what they should test
@@ -68,13 +68,13 @@ Use this shape for your final wrap-up message, so that every session ends the sa
 
 
 ## Which version to use
-< Only if bugs were found. One line per file with a `-WithBugFixes.js` copy: - `File.js` — recommend original or fixed, plus a few words on why (in business terms, not code). Default to recommending the original unless the bug makes the script fail outright. Then ask the user which version they want. Do not ask about anything else (e.g., duplicates or deployment) here. >
+< Only if bugs were found. One line per file with a `-2.1-WithBugFixes.js` copy: - `File-2.1.js` — recommend plain or fixed, plus a few words on why (in business terms, not code). Default to recommending the original unless the bug makes the script fail outright. Then ask the user which version they want. Do not ask about anything else (e.g., duplicates or deployment) here. >
 
 ## Assumptions I made
 < One short line per Default Decision you actually used, e.g., "Converted both copies of `X.js` (found in two folders)." Omit this section if you made none. >
 
 ## Before uploading
-< Only if needed, and concise. For example: for SuiteScript 1.0 scripts, the existing Script record must be updated to use the converted file, and its entry points should be checked. Also say that nothing was run in NetSuite, so the conversions are untested. >
+< Only if needed, and concise. For example: each converted script's existing Script record must be updated to use the new `-2.1` file, and its entry points should be checked. Also say that nothing was run in NetSuite, so the conversions are untested. >
 
 ## What to test
 < A short numbered list (about 3-5 items) of the highest-risk items only, in business terms. Omit if the conversions were straightforward. >
@@ -100,20 +100,32 @@ Make these decisions yourself. Do NOT ask the user about them. List each one you
 
 
 ## About "packaging" of scripts given by the user
-The user will probably give you "scripts to convert" in one of two ways. Either, the user will give you a "SuiteScripts.zip" file, which contains every SuiteScript file in their system, or, the user might give you just a single JavaScript file.
-If the user does not know how/where to give you scripts, suggest to them to follow this sequence of steps in their NetSuite system. This produces "SuiteScripts.zip":
+The user will give you "scripts to convert" in one of two ways. Normal users should work **one script at a time**: they give you a single JavaScript file. Developers may instead give you a "SuiteScripts.zip" file, which contains every SuiteScript file in their system.
+If the user does not know how/where to get a script, follow [When the user asks "Where do I start?"](#when-the-user-asks-where-do-i-start).
+If a developer wants the whole folder at once, suggest these steps in their NetSuite system. This produces "SuiteScripts.zip":
 
 1. Log in to NetSuite
 1. Go to Documents > File Cabinet
 1. Type `SuiteScripts` in the search box at the left and click Search
 1. In the results, find the row whose **Type is "Folder"**. It is not the row ending in ".zip" (that is an older archive). Click the "Download" link on that row. A "SuiteScripts.zip" file will be downloaded to your computer.
 
+
+## When the user asks "Where do I start?"
+Work out where the user is, then give **one step at a time**, in plain business language, and ask only what the next step needs. The steps below follow one script at a time. They were written around a Workflow Action script, so say so if the user's script type seems to need different steps.
+1. **Back up first.** Before anything else, they should download a backup of the SuiteScripts folder (the File Cabinet steps above: the search result whose Type is Folder, then Download) and upgrade their bundles. For bundles, go to the Installed Bundles page, find the bundles with Managed = "No" that show an update icon next to the version, and choose **Update** (never Uninstall). Don't start converting until the backup exists.
+1. **Download one script.** In NetSuite, go to the Scripts page and set the filters: Type "- All -", API Version 1.0 (then run it again for 2.0), Script File "- All -", From Bundle "None". Choose a row with **no Lock icon**. A Lock icon means the script belongs to a SuiteApp and only the vendor can update it, so skip it. Click the script's **file name** to open the file page, note the **Folder** it shows (the converted file goes in that same folder), then click **Download**. If the script is SuiteScript 1.0 and the Scripts page lists a Library Script file for it, download that library file the same way and give it to the skill too, so the two are converted together.
+1. **Start the skill.** In a new chat, attach that file, and any library file (Attach, or drag and drop), start this skill, and submit.
+1. **Read the result.** Walk them through the summary, then have them download the converted file, which ends in `-2.1.js`. If bugs were found, help them choose between `-2.1.js` (keeps today's behavior, the default) and `-2.1-WithBugFixes.js`.
+1. **Upload it from the Script record.** Open the Script record, click Edit, click the **+** next to Script File, set Attach From to Computer, set Folder to the folder the original file is in (not always SuiteScripts), select the converted file, and click Save in the dialog. Upload any converted library file the same way.
+1. **Save the Script record.** Check that Script File shows the new file and click Save. Then check that API Version shows 2.1 (this applies to 2.0 scripts too), and, if the record still shows a Function (entry point) field, that it matches the converted file, since entry-point names can change during conversion.
+1. **Test.** Test the change. Do not invent test steps. If the test fails, they can describe the problem back to you. To undo, point Script File on the Script record back to the original file, which is still in its folder. The backup is only needed if the original was deleted. Keep the originals until testing is done.
+
+
 ## About "packaging" of Scripts returned by you, to the user
-If the user gave you a zip file, then, you should return to the user, a new zip file. Always name it exactly `SuiteScripts21.zip`, regardless of the name of the zip file you were given. The new zip should contain only the converted files and any `-WithBugFixes.js` files; leave out the files you skipped, so that uploading it does not touch unchanged files.
-If you also write a summary file, name it `SuiteScripts21-Conclusions.md`.
+If the user gave you a zip file, then, you should return to the user, a new zip file. Always name it exactly `SuiteScripts-2.1.zip`, regardless of the name of the zip file you were given. The new zip should contain only the converted `-2.1.js` files and any `-2.1-WithBugFixes.js` files; leave out the files you skipped, so that uploading it does not touch unchanged files.
 If the user gave you individual JavaScript files, then, you should return to the user, individual JavaScript files.
-Tell the user to *overwrite* the existing file of the same name in the File Cabinet, rather than adding a new file. See [Oracle Article: Setting Up Your SuiteScript Development Environment](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0402065535.html).
-For converted SuiteScript 1.0 scripts, also tell the user that the existing Script record must be updated to use the converted file; NetSuite then updates the record's API version to 2.1. Entry point function names may have changed, so the user should check the Script record's entry points. See [Oracle Article: Converting a SuiteScript 1.0 Script to a SuiteScript 2.1 Script](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_160098641577.html).
+Converted files have new names, so they are added next to the originals and do not overwrite them. Tell the user to keep the originals until testing is done.
+For every converted script (1.0, 2.0 or 2.x), also tell the user that the existing Script record must be updated to use the new `-2.1` file; NetSuite then updates the record's API version to 2.1. Entry point function names may have changed, so the user should check the Script record's entry points. See [Oracle Article: Converting a SuiteScript 1.0 Script to a SuiteScript 2.1 Script](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_160098641577.html).
 
 
 ## Developer Note: Is a Script File actually being used in NetSuite?
@@ -124,7 +136,7 @@ If you have access into the NetSuite system, consider following [this Oracle Art
 ## Developer Note: Preserve Directory Structure
 If the SuiteScripts.zip file (given to you, by the user) has a structure of folders, then, the zip file which you return to the user should preserve that same folder structure.
 The intent is that the user will take the zip file which you return, and use the NetSuite File Cabinet "Advanced Add" button to put the new files back into their correct folders.
-A `-WithBugFixes.js` file (see [If you find bugs](#if-you-find-bugs-)) goes in the same folder as its original script.
+Each `-2.1.js` file, and any `-2.1-WithBugFixes.js` file (see [If you find bugs](#if-you-find-bugs-)), goes in the same folder as its original script.
 
 ## Developer Note: Skip "Not SuiteScript" file(s)
 If you are given file(s) which are NOT SuiteScript, then, skip those.
@@ -138,12 +150,12 @@ Leave files that are already SuiteScript 2.1 unchanged, unless a change is neede
 For each script given to you, your "transitioned" script should function the same as the original script. The goal is that "nobody even noticed" the transition to SuiteScript 2.1.
 When an old API call has no exact SuiteScript 2.1 equivalent, use your judgment to choose whatever code changes are needed so that the converted script produces the same end result as the original script.
 ### If you find bugs ...
-If you find 'bugs', you will be faced with the decision of: "Fix the bug?" or "Keep the new script functionally equivalent?" Ultimately, the user needs to make this decision, but, we will default with keeping the bugs as-is. The user is used to these scripts behaving with their bugs, and the intent of this skill is to NOT change behavior. Therefore, the 'same filename' new script is the **functionally equivalent** version: it **is** converted, but **intentionally** retains the original bugs (never put a behavior-changing fix in this file; all fixes go only in the `-WithBugFixes.js` file), and has `FIXME` comments added at the end of the line(s) containing the actual identified bug, describing the bug and suggesting a fix.
-In such cases, you should create, and return to the user, **two** new script files: the 'same filename' new script (converted, bugs retained, with `FIXME` comments), and an additional script file whose filename uses a `-WithBugFixes.js` filename suffix. This `-WithBugFixes.js` file is also converted, but has the identified bugs fixed. In this file, put a short `/* FIXED: ... */` comment at the end of each line you fixed, briefly stating what changed, so the user can easily compare the two versions.
-At the end of the session, tell the user which bugs were found and fixed, and discuss with them whether to use the `-WithBugFixes.js` version or the original-named version of each script. Default to recommending the original-named version unless the user wants the changed behavior.
+If you find 'bugs', you will be faced with the decision of: "Fix the bug?" or "Keep the new script functionally equivalent?" Ultimately, the user needs to make this decision, but, we will default with keeping the bugs as-is. The user is used to these scripts behaving with their bugs, and the intent of this skill is to NOT change behavior. Therefore, the plain `-2.1.js` script is the **functionally equivalent** version: it **is** converted, but **intentionally** retains the original bugs (never put a behavior-changing fix in this file; all fixes go only in the `-2.1-WithBugFixes.js` file), and has `FIXME` comments added at the end of the line(s) containing the actual identified bug, describing the bug and suggesting a fix.
+In such cases, you should create, and return to the user, **two** new script files: the `-2.1.js` script (converted, bugs retained, with `FIXME` comments), and an additional script file whose filename uses a `-2.1-WithBugFixes.js` suffix. This `-2.1-WithBugFixes.js` file is also converted, but has the identified bugs fixed. In this file, put a short `/* FIXED: ... */` comment at the end of each line you fixed, briefly stating what changed, so the user can easily compare the two versions.
+At the end of the session, tell the user which bugs were found and fixed, and discuss with them whether to use the `-2.1-WithBugFixes.js` version or the `-2.1.js` version of each script. Default to recommending the `-2.1.js` version unless the user wants the changed behavior.
 **Filename example:**
-MyScriptFile.js -> TWO FILES returned...  `MyScriptFile.js` (bugs retained, with FIXME comments) and `MyScriptFile-WithBugFixes.js` (bugs fixed)
-**Example "with bugs" code block in new `MyScriptFile.js`**:
+MyScriptFile.js -> TWO FILES returned...  `MyScriptFile-2.1.js` (bugs retained, with FIXME comments) and `MyScriptFile-2.1-WithBugFixes.js` (bugs fixed)
+**Example "with bugs" code block in new `MyScriptFile-2.1.js`**:
 ```
 var myrecord = .... ; /* Originally declared as "myrecord" with correct spelling */
 /* ... */
@@ -181,7 +193,9 @@ If you find scripts which appear to be used as libraries, consider transitioning
 
 
 ## Developer Note: Naming New Scripts
-Your newly transitioned script filenames should be identical to the filename being transitioned. The only exception is when you find bugs: in that case you also return a second file with a `-WithBugFixes.js` suffix (see [If you find bugs](#if-you-find-bugs-)). The converted script with the original filename is always returned, and it keeps the original bugs. You will find that, some filenames contain, in the filename, hints that the script is "1.0" or "2.0" or "2.x". In your wrap-up comments to the user, you might lightly suggest that the user considers renaming those script files from within the NetSuite File Cabinet.
+Every script you convert gets a new filename: the original name plus `-2.1` before `.js`. For example, `util_RMNSUG.js` becomes `util_RMNSUG-2.1.js`. When you find bugs, you also return `util_RMNSUG-2.1-WithBugFixes.js` (see [If you find bugs](#if-you-find-bugs-)). There are no spaces in the suffix. Files you skip (already 2.1, third-party libraries, not scripts) keep their names and are not returned.
+If a converted script refers to another script or library that you also converted (for example, in a `define` dependency path), change that reference to the other file's new `-2.1` name, so it does not load the old, unconverted file.
+You will find that, some filenames contain, in the filename, hints that the script is "1.0" or "2.0" or "2.x". In your wrap-up comments to the user, you might lightly suggest that the user considers renaming those script files from within the NetSuite File Cabinet.
 
 
 ## Developer Note: Library Naming Conventions
@@ -250,7 +264,9 @@ In every new file-header JSDoc, in the same block where you already define `@NAp
 
 ## Deploying the converted files
 When the user asks how to put the converted files into NetSuite, refer them to Oracle's documentation instead of restating the steps, and offer to walk them through it. Before they begin, they should download a backup of the existing SuiteScripts folder (or the individual script file), and, if they have one, try the changes in a sandbox account first.
-- **Uploading `SuiteScripts21.zip` or individual files:** [Oracle Article: Uploading Files to the File Cabinet](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N542268.html). One detail to call out: when using "Advanced Add" with a zip file, the user should confirm that the Destination Folder says "SuiteScripts" and that both **"Unzip Files"** and **"Overwrite Files with Same Name"** are checked. Otherwise the zip will not be extracted, or the existing files will not be replaced. They should be inside the "SuiteScripts" folder when they do this: click the "SuiteScripts" folder in the left-hand tree first, then click "Advanced Add".- **SuiteScript 1.0 scripts:** after uploading, the existing Script record must be updated to use the converted file. See [Oracle Article: Converting a SuiteScript 1.0 Script to a SuiteScript 2.1 Script](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_160098641577.html).
+- **Uploading one converted file:** from the Script record, as described in [When the user asks "Where do I start?"](#when-the-user-asks-where-do-i-start). This is the path for normal users. See [Oracle Article: Uploading Files to the File Cabinet](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N542268.html) for other ways.
+- **Uploading `SuiteScripts-2.1.zip`:** use "Advanced Add" from inside the "SuiteScripts" folder (click the folder in the left-hand tree first). The user should confirm that the Destination Folder says "SuiteScripts" and that **"Unzip Files"** is checked. Otherwise the zip will not be extracted. The new files are added next to the originals.
+- **Every converted script (1.0, 2.0 or 2.x):** after uploading, the existing Script record must be updated to use the new `-2.1` file. See [Oracle Article: Converting a SuiteScript 1.0 Script to a SuiteScript 2.1 Script](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_160098641577.html).
 
 
 ## Additional Resources

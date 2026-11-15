@@ -1,6 +1,6 @@
 # rmnsug-suitescript21-transition
 
-An AI skill that converts NetSuite **SuiteScript 1.0 and 2.0** files to **SuiteScript 2.1**. Give it a `SuiteScripts.zip` exported from the NetSuite File Cabinet (or individual `.js` files), and it returns the converted scripts, a bug report, and a plain-language summary.
+An AI skill that converts NetSuite **SuiteScript 1.0 and 2.0** files to **SuiteScript 2.1**. Give it a script downloaded from NetSuite (one script at a time is recommended; developers can instead give it a whole `SuiteScripts.zip`), and it returns the converted script, a bug report, and a plain-language summary.
 
 Built for the [Rocky Mountain NetSuite User Group (RMNSUG)](https://rmnsug.org/), because [Oracle is retiring SuiteScript 1.0 and requires the move to 2.1](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_7161922360.html).
 
@@ -13,7 +13,7 @@ The whole skill is one file: [`SKILL.md`](SKILL.md).
      `https://raw.githubusercontent.com/mkachline/rmnsug-suitescript21-transition/refs/heads/main/SKILL.md`
    - Right-click the page, choose **Save As**, and save it as **`SKILL.md`**. Check that the name is exactly `SKILL.md`, not `SKILL.md.txt`. If your browser added `.txt`, rename the file.
    - In your AI assistant's settings, find **Skills** and upload that file. In Claude this is under Settings > Capabilities, or Customize > Skills, depending on your version of the app.
-2. **Start a conversation.** In a new chat, type `/rmnsug-suitescript21-transition` and tell the assistant you're new to this, for example: "I'm a NetSuite admin, not a programmer. What should I do first?" The assistant will walk you through getting your scripts out of NetSuite, converting them, and what to check before putting them back. **Nothing is changed in your NetSuite account** until you upload the results yourself.
+2. **Start a conversation.** In a new chat, type `/rmnsug-suitescript21-transition` and tell the assistant you're new to this, for example: "I'm a NetSuite admin, not a programmer. What should I do first?" The assistant will walk you through it **one script at a time**: backing up, downloading a script from NetSuite, converting it, and what to check before putting the converted file back. For a fuller walkthrough with screenshots, see the November 2026 post, "SuiteScript for Non-Scripters", under [rmnsug.org/posts](https://rmnsug.org/posts/). **Nothing is changed in your NetSuite account** until you upload the results yourself.
 
 > **Please don't ask the assistant to "install this skill" from a web address.** It will read the page and write its *own* version of the skill, which is not the tested one. Always add the downloaded file through the Skills settings.
 
@@ -22,7 +22,7 @@ The whole skill is one file: [`SKILL.md`](SKILL.md).
 ## What it does
 
 - Converts SuiteScript 1.0 and 2.0 scripts to 2.1, keeping each script's original coding style and folder structure.
-- Aims for **identical behavior**. Where the original has bugs, the converted file keeps them, with a `FIXME` comment on each. A second file named `Name-WithBugFixes.js` has the fixes, so you choose which to deploy.
+- Aims for **identical behavior**. Where the original has bugs, the converted file keeps them, with a `FIXME` comment on each. Every converted file gets a new name ending in `-2.1.js` (for example, `util_RMNSUG.js` becomes `util_RMNSUG-2.1.js`), so your original is never overwritten. A second file named `Name-2.1-WithBugFixes.js` has the fixes, so you choose which to deploy.
 - Leaves files alone that are already 2.1, aren't scripts, or are third-party libraries (it mentions any that look old).
 - Flags hard-coded passwords, API keys and similar secrets without repeating their values.
 - Asks the user almost no questions. It makes documented default decisions and lists them under "Assumptions I made" in its summary.
@@ -67,13 +67,13 @@ Skills > Create > Upload from your computer, using the same zipped folder as abo
 
 ## Requirements
 
-- A model that is good at writing code. Suggested minimums: **Claude Sonnet at medium effort** or better, and **OpenAI Terra at medium effort** or better. Smaller models tend to ask questions an accountant can't answer or skip steps.
+- A model that is good at writing code. We suggest Claude Opus 5.5, OpenAI 6.1 Sol, or Gemini 4 Argon. Model names change quickly, so treat these as suggestions. Smaller models tend to ask questions an accountant can't answer or skip steps.
 - **Web access.** The skill tells the model to read Oracle's SuiteScript documentation before converting. A model that can't read web pages is told to stop and say so, rather than guess.
 
 ## Status and limits
 
 - **Conversions have not been run in NetSuite.** Always back up your `SuiteScripts` folder, try the converted files in a sandbox if you have one, and test the highest-risk scripts before relying on them. The skill's summary says which ones those are.
-- Converted SuiteScript 1.0 scripts also need their existing Script record re-pointed at the converted file. See [Oracle's guide](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_160098641577.html).
+- Every converted script (1.0, 2.0 or 2.x) needs its existing Script record re-pointed at the new `-2.1` file. See [Oracle's guide](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_160098641577.html).
 - Don't commit your own NetSuite scripts, exports or secrets to this repository. The [`.gitignore`](.gitignore) is an allowlist to help prevent that.
 
 ## Contributing and feedback
